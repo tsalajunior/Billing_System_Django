@@ -7,6 +7,7 @@ from .migrations import *
 class AdminCustomer(admin.ModelAdmin):
     list_display = ("name", "email", "phone_number", "address", "sex", "age", "city", "zip_code", "created_at")
     search_fields = ("name", "email", "phone_number", "city")
+    list_filter = ("name", "email")
 
 class AdminInvoice(admin.ModelAdmin):   
     list_display = ("customer", "invoice_date", "amount", "last_updated", "paid", "invoice_type")

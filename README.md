@@ -44,6 +44,7 @@ A simple **Django-based billing management application** that allows users to au
 * **HTML5**
 * **CSS3**
 * **JavaScript**
+* **Bootstrap**
 
 ### Database
 
@@ -278,10 +279,21 @@ Possible future improvements include:
 
 ## 👨‍💻 Author
 
-**Stephane Tsala**
+* **LinkedIn**: [www.linkedin.com/in/stephane-tsala](https://www.linkedin.com/in/stephane-tsala/)
+* **Gmail**: [stephaneboska@gmail.com](mailto:stephaneboska@gmail.com)
 
 Django web application developed as a learning/project application demonstrating backend development with Django, MySQL database integration, frontend development, authentication, CRUD operations, PDF generation, and internationalization.
 
 ## 📄 License
 
 This project is intended for educational and/or personal use.
+
+#### **Screenshots**
+
+![1789661468571](image/README/1789661468571.png)
+
+![1789661957224](image/README/1789661957224.png)
+
+![1789661964903](image/README/1789661964903.png)
+
+![1789718494905](image/README/1789718494905.png)
