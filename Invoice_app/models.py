@@ -39,7 +39,7 @@ class Invoice(models.Model):
     Author: stephaneboska@gmail.com
     """
 
-    INVOICE_TYPES = [("R", "Receipt"), ("I", "Invoice"), ("P", "Pro Forma Invoice")]
+    INVOICE_TYPES = [("R", "Receipt"), ("I", "Invoice"), ("P", "Proforma Invoice")]
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     save_by = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -84,3 +84,6 @@ class Products(models.Model):
     @property
     def get_total_price(self):
         return self.quantity * self.unit_price
+
+    def __str__(self):
+        return self.name

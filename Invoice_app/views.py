@@ -1,7 +1,9 @@
+from django.http import request
 from django.shortcuts import render
 from django.views import View
 from .models import *
 from django.contrib import messages
+from django.db import transaction
 
 
 # Create your views here.
@@ -39,15 +41,15 @@ class AddCustomerView(View):
 
     def post(self, request, *args, **kwargs):
         data = {
-            'name': request.POST.get('name'),
-            'email': request.POST.get('email'),
-            'phone_number': request.POST.get('phone'),
-            'sex': request.POST.get('sex'),
-            'age': request.POST.get('age'),
-            'address': request.POST.get('address'),
-            'city': request.POST.get('city'),
-            'zip_code': request.POST.get('zip_code'),
-            'save_by': request.user
+            "name": request.POST.get("name"),
+            "email": request.POST.get("email"),
+            "phone_number": request.POST.get("phone"),
+            "sex": request.POST.get("sex"),
+            "age": request.POST.get("age"),
+            "address": request.POST.get("address"),
+            "city": request.POST.get("city"),
+            "zip_code": request.POST.get("zip_code"),
+            "save_by": request.user,
         }
         try:
             created = Customer.objects.create(**data)  #
@@ -59,3 +61,64 @@ class AddCustomerView(View):
             messages.error(request, f"Error occurred while adding customer: {str(e)}")
 
         return render(request, self.template_name)
+
+
+class AddInvoiceView(View):
+    """
+    View for adding a new invoice.
+    Renders the add_invoice.html template.
+    """
+
+    template_name = "add_invoice.html"
+
+    def get(self, request, *args, **kwargs):
+        customers = Customer.objects.select_related("save_by").all()
+        return render(request, self.template_name, {"customers": customers})
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        customers = Customer.objects.select_related("save_by").all()
+        context = {"customers": customers}
+
+        items = []
+        try:
+            with transaction.atomic():
+                customer = request.POST.get("customer")
+                invoice_type = request.POST.get("invoice_type")
+                articles = request.POST.getlist("article")
+                quantities = request.POST.getlist("qty")
+                units = request.POST.getlist("unit_price")
+                total_a = request.POST.getlist("total_price-a")
+                total = request.POST.get("total_price")
+                comments = request.POST.get("comments")
+
+                if not articles:
+                    messages.error(request, "Please add at least one article.")
+                    return render(request, self.template_name, context)
+
+                data = {
+                    "customer_id": customer,
+                    "save_by": request.user,
+                    "invoice_type": invoice_type,
+                    "amount": float(total) if total else 0.0,
+                    "comments": comments,
+                }
+
+                invoice = Invoice.objects.create(**data)
+
+                for index, article in enumerate(articles):
+                    if index < len(quantities) and index < len(units):
+                        item = Products(
+                            invoice_id=invoice.id,
+                            name=article,
+                            quantity=float(quantities[index]) if quantities[index] else 0.0,
+                            unit_price=float(units[index]) if units[index] else 0.0,
+                            total_price=float(total_a[index]) if total_a[index] else 0.0,
+                        )
+                        items.append(item)
+
+                Products.objects.bulk_create(items)  # Use bulk_create to insert multiple items at once
+                messages.success(request, "Invoice added successfully.")
+        except Exception as e:
+            messages.error(request, f"Error occurred while adding invoice: {str(e)}.")
+        return render(request, self.template_name, context)

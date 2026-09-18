@@ -5,13 +5,9 @@
 <br><br>
 
 <div class="row justify-content-between display-flex ml-4 mr-4">
-    <a href="" class="btn col-md-4 btn-primary">
+    <a href="{% url 'add_invoice' %}" class="btn col-md-4 btn-primary">
         Register a new invoice <span class="badge text-bg-secondary"></span>
     </a>
-
-    <!-- <a href='#' class="col-md-4">
-        <span class="badge text-bg-secondary"></span>
-    </a> -->
 
     <a href="{% url 'add_customer' %}" class="btn col-md-4 btn-primary">
         Register a new customer <span class="badge text-bg-secondary"></span>
@@ -55,8 +51,7 @@
                 </td>
                 <td>{{facture.invoice_type }}</td>
                 <td>
-                    <a href="" title="Detail"
-                        class="badge text-white bg-success">View</a>
+                    <a href="" title="Detail" class="badge text-white bg-success">View</a>
 
                     <button id="btn-invoice-sup" type="button" data-toggle="modal" data-target="#supprimer"
                         class="badge text-white bg-danger" title="Supprimer" data-id=""
@@ -73,7 +68,7 @@
             {% endfor %}
 
             <!-- pagination -->
-            
+
 
             {% else %}
 

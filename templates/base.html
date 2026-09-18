@@ -11,7 +11,9 @@
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     {% load static %}
     <link rel="icon" type="image/x-icon" href="{% static 'images/InvoiceAppLogo.ico' %}">
-
+    
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <title>Invoice System</title>
 </head>
 
@@ -53,8 +55,8 @@
                             More options
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'add_customer' %}">Add costumer</a>
-                            <a class="dropdown-item" href="#">Add invoice</a>
+                            <a class="dropdown-item" href="{% url 'add_customer' %}">Add customer</a>
+                            <a class="dropdown-item" href="{% url 'add_invoice' %}">Add invoice</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="#">Statistics</a>
                         </div>
@@ -85,6 +87,7 @@
     {% block content %}
     {% endblock %}
 
+    <script src="{% static 'js/main.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
