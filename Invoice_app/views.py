@@ -4,6 +4,7 @@ from django.views import View
 from .models import *
 from django.contrib import messages
 from django.db import transaction
+from .utils import pagination
 
 
 # Create your views here.
@@ -20,13 +21,17 @@ class HomeView(View):
     """
     invoices = Invoice.objects.select_related("customer", "save_by").all()
     context = {"invoices": invoices}
-
     def get(self, request, *args, **kwargs):
+        items = pagination(request, self.invoices)  # Paginate the invoices
+        self.context["invoices"] = items  # Update the context with paginated invoices
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
+        items = pagination(request, self.invoices)  # Paginate the invoices
+        self.context["invoices"] = items  # Update the context with paginated invoices
         return render(request, self.template_name, self.context)
 
+    
 
 class AddCustomerView(View):
     """

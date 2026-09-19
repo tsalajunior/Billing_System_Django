@@ -4,7 +4,7 @@
 {% block content %}
 <br><br>
 
-<div class="row justify-content-between display-flex ml-4 mr-4">
+<div class="row justify-content-between display-flex ml-5 mr-5">
     <a href="{% url 'add_invoice' %}" class="btn col-md-4 btn-primary">
         Register a new invoice <span class="badge text-bg-secondary"></span>
     </a>
@@ -17,11 +17,11 @@
 
 <br> <br>
 
-<div class="form-group ml-4 mr-4">
-    <input id="search" class="form-control" type="text" placeholder="Search....">
+<div class="form-group ml-5 mr-5">
+    <input id="search" class="form-control" type="text" placeholder="Search an invoice...">
 </div>
 
-<div class="ml-4 mr-4">
+<div class="ml-5 mr-5">
     <table class="table table-striped-columns">
         <thead>
             <tr>
@@ -41,7 +41,7 @@
                 <th scope="row">{{ facture.pk }}</th>
                 <td>{{facture.customer.name}}</td>
                 <td>{{facture.invoice_date}}</td>
-                <td>{{ facture.get_total_price }}</td>
+                <td>{{ facture.get_total_amount }}</td>
                 <td>
                     {% if facture.paid %}
                     <img src="{% static 'images/icon-yes.svg' %}" alt="True">
@@ -49,25 +49,23 @@
                     <img src="{% static 'images/icon-no.svg' %}" alt="False">
                     {% endif %}
                 </td>
-                <td>{{facture.invoice_type }}</td>
-                <td>
-                    <a href="" title="Detail" class="badge text-white bg-success">View</a>
+                <td>{{facture.get_invoice_type_display }}</td>
+                <td class="d-flex justify-content-between align-items-center gap-2">
+                    <a href="" title="Detail" class="badge text-white bg-primary p-2">View</a>
 
                     <button id="btn-invoice-sup" type="button" data-toggle="modal" data-target="#supprimer"
-                        class="badge text-white bg-danger" title="Supprimer" data-id=""
+                        class="badge text-white bg-danger p-2" title="Supprimer" data-id=""
                         data-customer="{{facture.customer.name}}">Delete
                     </button>
 
                     <button id="btn-invoice-mod" type="button" data-toggle="modal" title="Modifier"
                         data-target="#modifier" data-id="{{facture.pk}}" data-customer=""
-                        class="badge text-dark bg-warning"> Modify
+                        class="badge text-dark bg-warning p-2"> Modify
                     </button>
                 </td>
             </tr>
 
             {% endfor %}
-
-            <!-- pagination -->
 
 
             {% else %}
@@ -79,6 +77,33 @@
         </tbody>
 
     </table>
+
+    <!-- pagination -->
+    {% if invoices.has_other_pages %}
+    <div class="btn-group" role="group" aria-label="Item pagination">
+        <!-- previous page -->
+        {% if invoices.has_previous %}
+        <a href="?page={{ invoices.previous_page_number }}" class="btn btn-outline-primary p-2">&laquo; previous
+            page</a>
+        {% endif %}
+
+        <!-- page numbers -->
+        {% for page_number in invoices.paginator.page_range %}
+        {% if invoices.number == page_number %}
+        <button class="btn btn-outline-primary p-2 active">
+            <span>{{page_number}}<span class="sr-only">(current)</span></span>
+        </button>
+        {% else %}
+        <a href="?page={{ page_number }}" class="btn btn-outline-primary p-2">{{ page_number }}</a>
+        {% endif %}
+        {% endfor %}
+
+        <!-- next page -->
+        {% if invoices.has_next %}
+        <a href="?page={{ invoices.next_page_number }}" class="btn btn-outline-primary p-2">next page &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 
 <!-- Modal modifier -->
@@ -150,6 +175,7 @@
 
 <br><br>
 
+<!-- invoice buttons functionalities -->
 <script type="text/javascript">
 
     // modification
@@ -174,7 +200,7 @@
 
 </script>
 
-
+<!-- Search functionality -->
 <script>
 
     $(document).ready(function () {

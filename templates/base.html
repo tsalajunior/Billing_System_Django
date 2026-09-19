@@ -20,11 +20,11 @@
 <body>
     <!-- header -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between display-flex p-4">
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'images/InvoiceAppLogo.png' %}" width="30" height="30"
+        <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 px-5 d-flex align-items-center">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <img src="{% static 'images/InvoiceAppLogo.png' %}" width="50" height="50"
                     class="d-inline-block align-top" alt="">
-                Invoice System
+                <span class="ml-2 text-primary font-weight-bold">Invoice System</span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -96,7 +96,7 @@
         crossorigin="anonymous"></script>
 
 
-    <footer class="text-center">
+    <footer class="text-center ml-5 mr-5 mt-4">
         <div class="text-center">
             © 2026 Copyright:
             <a href="https://www.linkedin.com/in/stephane-tsala/" target="_blank">By Stephane

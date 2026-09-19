@@ -63,6 +63,9 @@ class Invoice(models.Model):
     def get_total_amount(self):
         total_amount = sum(product.get_total_price for product in self.products_set.all())
         return total_amount
+
+    def get_invoice_type_display(self):
+        return dict(self.INVOICE_TYPES).get(self.invoice_type, "Unknown")
         
 
 class Products(models.Model):

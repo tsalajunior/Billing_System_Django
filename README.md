@@ -288,12 +288,14 @@ Django web application developed as a learning/project application demonstrating
 
 This project is intended for educational and/or personal use.
 
-#### **Screenshots**
+## 📸 Screenshots
 
-![1789661468571](image/README/1789661468571.png)
+![1789834508741](image/README/1789834508741.png)
 
-![1789661957224](image/README/1789661957224.png)
+![1789834514360](image/README/1789834514360.png)
 
-![1789661964903](image/README/1789661964903.png)
+![1789834519012](image/README/1789834519012.png)
 
-![1789718494905](image/README/1789718494905.png)
+![1789834525102](image/README/1789834525102.png)
+
+![1789834529371](image/README/1789834529371.png)
