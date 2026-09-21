@@ -161,3 +161,7 @@ footer {
 .custom-actions-btns .btn {
     margin: .3rem 0 .3rem .3rem;
 }
+
+.btn-invoice-sup, .btn-invoice-mod{
+    outline: none !important;
+}

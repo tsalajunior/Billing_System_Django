@@ -1,10 +1,16 @@
-from django.http import request
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from .models import *
 from django.contrib import messages
 from django.db import transaction
-from .utils import pagination
+from .utils import pagination, get_invoice
+from django.template.loader import get_template  # to retrieve an html file
+
+
+import datetime
+import os
+import pdfkit
 
 
 # Create your views here.
@@ -19,7 +25,11 @@ class HomeView(View):
     select_related is used to optimize database queries by fetching related objects in a single query, reducing the number of database hits.
     In this case, it fetches the related 'customer' object for each invoice, which can improve performance when displaying invoice data along with customer information.
     """
-    invoices = Invoice.objects.select_related("customer", "save_by").all()
+    invoices = (
+        Invoice.objects.select_related("customer", "save_by")
+        .all()
+        .order_by("-invoice_date")
+    )  # display the recent invoices saved
     context = {"invoices": invoices}
 
     def get(self, request, *args, **kwargs):
@@ -50,7 +60,7 @@ class HomeView(View):
                 messages.success(request, "Deletion was successful.")
             except Exception as e:
                 messages.error(request, f"Sorry, an error has occured: {e}")
-                
+
         # placed here to update the displayed data
         items = pagination(request, self.invoices)  # Paginate the invoices
         self.context["invoices"] = items  # Update the context with paginated invoices
@@ -157,3 +167,61 @@ class AddInvoiceView(View):
         except Exception as e:
             messages.error(request, f"Error occurred while adding invoice: {str(e)}.")
         return render(request, self.template_name, context)
+
+
+class InvoiceVisualisationView(View):
+    """
+    View for visualising an Invoice.
+    Renders the invoice.html template.
+    """
+
+    # the variables in context should be the same names like that one used in the template
+    template_name = "invoice.html"
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        context = get_invoice(pk)
+
+        return render(request, self.template_name, context)
+
+
+def get_invoice_pdf(request, *args, **kwargs):
+    """
+    generate pdf file from html file
+
+    """
+
+    # Dynamically build the path using the ProgramFiles environment variable
+    program_files = os.environ.get('ProgramFiles', r'C:\Program Files')
+    path_wkhtmltopdf = os.path.join(program_files, 'wkhtmltopdf', 'bin', 'wkhtmltopdf.exe')
+
+    # Pass the path to the pdfkit configuration
+    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
+    pk = kwargs.get('pk')
+    context = get_invoice(pk)
+    context["date"] = datetime.datetime.today()
+    context["base_url"] = request.build_absolute_uri('/')
+
+    # get html file
+    template = get_template("invoice_pdf.html")
+
+    # render html file with context
+    html = template.render(context, request)
+
+    # pdf format options
+    options = {
+        'page-size':'Letter',
+        'encoding': 'UTF-8',
+        # 'enable-local-file-access': '',
+        'load-error-handling': 'ignore',       
+        'load-media-error-handling': 'ignore'
+    }
+
+    # generate the pdf file
+    pdf = pdfkit.from_string(html, False, options=options, configuration=config)
+
+    response = HttpResponse(pdf, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachement; filename="invoice_{pk}.pdf"'
+
+    return response

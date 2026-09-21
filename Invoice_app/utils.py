@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .models import *
 
 
 def pagination(request, invoices):
@@ -21,3 +22,17 @@ def pagination(request, invoices):
         items_page = paginator.page(paginator.num_pages)
 
     return items_page  # Return the paginated invoices for rendering in the template
+
+
+def get_invoice(pk):
+    """
+    get_invoice function
+    """
+    obj = Invoice.objects.get(pk=pk)
+    articles = obj.products_set.all()
+    context = {
+        'obj':obj,
+        'articles':articles
+    }
+
+    return context
