@@ -21,17 +21,41 @@ class HomeView(View):
     """
     invoices = Invoice.objects.select_related("customer", "save_by").all()
     context = {"invoices": invoices}
+
     def get(self, request, *args, **kwargs):
         items = pagination(request, self.invoices)  # Paginate the invoices
         self.context["invoices"] = items  # Update the context with paginated invoices
         return render(request, self.template_name, self.context)
 
     def post(self, request, *args, **kwargs):
+        # modify
+        if request.POST.get("id_modified"):
+            paid = request.POST.get("modified")
+            try:
+                obj = Invoice.objects.get(id=request.POST.get("id_modified"))
+                if paid == "True":
+                    obj.paid = True
+                else:
+                    obj.paid = False
+                obj.save()
+                messages.success(request, "Chnages made successfully.")
+            except Exception as e:
+                messages.error(request, f"Sorry, an error has occured: {e}")
+
+        # deleting
+        if request.POST.get("id_supprimer"):
+            try:
+                obj = Invoice.objects.get(pk=request.POST.get("id_supprimer"))
+                obj.delete()
+                messages.success(request, "Deletion was successful.")
+            except Exception as e:
+                messages.error(request, f"Sorry, an error has occured: {e}")
+                
+        # placed here to update the displayed data
         items = pagination(request, self.invoices)  # Paginate the invoices
         self.context["invoices"] = items  # Update the context with paginated invoices
         return render(request, self.template_name, self.context)
 
-    
 
 class AddCustomerView(View):
     """
@@ -116,13 +140,19 @@ class AddInvoiceView(View):
                         item = Products(
                             invoice_id=invoice.id,
                             name=article,
-                            quantity=float(quantities[index]) if quantities[index] else 0.0,
+                            quantity=(
+                                float(quantities[index]) if quantities[index] else 0.0
+                            ),
                             unit_price=float(units[index]) if units[index] else 0.0,
-                            total_price=float(total_a[index]) if total_a[index] else 0.0,
+                            total_price=(
+                                float(total_a[index]) if total_a[index] else 0.0
+                            ),
                         )
                         items.append(item)
 
-                Products.objects.bulk_create(items)  # Use bulk_create to insert multiple items at once
+                Products.objects.bulk_create(
+                    items
+                )  # Use bulk_create to insert multiple items at once
                 messages.success(request, "Invoice added successfully.")
         except Exception as e:
             messages.error(request, f"Error occurred while adding invoice: {str(e)}.")
