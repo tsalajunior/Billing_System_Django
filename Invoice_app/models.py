@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _ 
 
 
 class Customer(models.Model):
@@ -9,7 +10,7 @@ class Customer(models.Model):
     Author: stephaneboska@gmail.com
     """
 
-    SEX_TYPES = [("M", "Male"), ("F", "Female")]
+    SEX_TYPES = [("M", _("Male")), ("F", _("Female"))]
 
     name = models.CharField(max_length=150, null=False, blank=False)
     email = models.EmailField(unique=True, null=False, blank=False)
@@ -39,7 +40,7 @@ class Invoice(models.Model):
     Author: stephaneboska@gmail.com
     """
 
-    INVOICE_TYPES = [("R", "Receipt"), ("I", "Invoice"), ("P", "Proforma Invoice")]
+    INVOICE_TYPES = [("R", _("Receipt")), ("I", _("Invoice")), ("P", _("Proforma Invoice"))]
 
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     save_by = models.ForeignKey(User, on_delete=models.PROTECT)
@@ -65,7 +66,7 @@ class Invoice(models.Model):
         return total_amount
 
     def get_invoice_type_display(self):
-        return dict(self.INVOICE_TYPES).get(self.invoice_type, "Unknown")
+        return dict(self.INVOICE_TYPES).get(self.invoice_type, _("Unknown"))
         
 
 class Products(models.Model):

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load i18n %}
 {% load static %}
 <html lang="en">
 
@@ -11,54 +12,55 @@
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
     {% load static %}
     <link rel="icon" type="image/x-icon" href="{% static 'images/InvoiceAppLogo.ico' %}">
-    
+
     <script src="https://code.jquery.com/jquery-3.7.1.js"
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <title>Invoice System</title>
+    <title>{% trans 'Invoice System' %}</title>
 </head>
 
 <body>
+    {% get_available_languages as LANGUAGES %}
+    {% get_language_info_list for LANGUAGES as languages %}
     <!-- header -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 px-5 d-flex align-items-center">
-            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light py-2 px-5">
+            <a class="navbar-brand d-flex align-items-center mr-auto" href="{% url 'home' %}">
                 <img src="{% static 'images/InvoiceAppLogo.png' %}" width="50" height="50"
                     class="d-inline-block align-top" alt="">
-                <span class="ml-2 text-primary font-weight-bold">Invoice System</span>
+                <span class="ml-2 text-primary font-weight-bold">{% trans 'Invoice System' %}</span>
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
-                            aria-expanded="false">
-                            Languages
-                        </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">English</a>
-                            <a class="dropdown-item" href="#">German</a>
-                            <a class="dropdown-item" href="#">French</a>
-                        </div>
-                    </li>
-                </ul>
+            <div class="d-flex align-items-center ml-auto">
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="{% trans 'Toggle navigation' %}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
             </div>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
+            <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+                <ul class="navbar-nav align-items-center">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link text-white dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{% static 'images/translate.png' %}" alt="" width="20" height="20">
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for language in languages %}
+                            <a href="/{{language.code}}" class="dropdown-item">{{ language.name_local }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <li class="nav-item dropdown ml-lg-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                             aria-expanded="false">
-                            More options
+                            {% trans 'More options' %}
                         </a>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'add_customer' %}">Add customer</a>
-                            <a class="dropdown-item" href="{% url 'add_invoice' %}">Add invoice</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="{% url 'add_customer' %}">{% trans 'Add customer' %}</a>
+                            <a class="dropdown-item" href="{% url 'add_invoice' %}">{% trans 'Add invoice' %}</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Statistics</a>
+                            <a class="dropdown-item" href="#">{% trans 'Statistics' %}</a>
                         </div>
                     </li>
                 </ul>
@@ -75,7 +77,7 @@
             {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
                 {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <button type="button" class="close" data-dismiss="alert" aria-label="{% trans 'Close' %}">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -98,9 +100,8 @@
 
     <footer class="text-center ml-5 mr-5 mt-4">
         <div class="text-center">
-            © 2026 Copyright:
-            <a href="https://www.linkedin.com/in/stephane-tsala/" target="_blank">By Stephane
-                Tsala</a> |
+            &copy; 2026 {% trans 'Copyright' %}:
+            <a href="https://www.linkedin.com/in/stephane-tsala/" target="_blank">{% trans 'By Stephane Tsala' %}</a> |
             <a href="https://www.github.com/tsalajunior/" target="_blank">GitHub</a>
         </div>
     </footer>

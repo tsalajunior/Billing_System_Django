@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 
 {% block content %}
 <br><br>
-<h1 class="text-white mx-5 mb-4 text-center">Register A New Invoice</h1>
+<h1 class="text-white mx-5 mb-4 text-center">{% trans 'Register A New Invoice' %}</h1>
 <form method="POST" action="{% url 'add_invoice' %}" class="text-white mx-5">
     {% csrf_token %}
     <div class="form-row">
         <div class="form-group col-md-12">
-            <label for="customer">Customer</label>
+            <label for="customer">{% trans 'Customer' %}</label>
             <select class="form-control" id="customer" name="customer">
-                <option value="">Select Customer...</option>
+                <option value="">{% trans 'Select Customer...' %}</option>
                 {% for customer in customers %}
                 <option value="{{ customer.id }}">{{ customer.name }}</option>
                 {% endfor %}
@@ -20,12 +21,12 @@
 
     <div class="form-row">
         <div class="form-group col-md-12">
-            <label for="invoice_type">Invoice Type</label>
+            <label for="invoice_type">{% trans 'Invoice Type' %}</label>
             <select class="form-control" id="invoice_type" name="invoice_type">
-                <option value="">Select Invoice Type...</option>
-                <option value="R">Receipt</option>
-                <option value="P">Proforma Invoice</option>
-                <option value="I">Invoice</option>
+                <option value="">{% trans 'Select Invoice Type...' %}</option>
+                <option value="R">{% trans 'Receipt' %}</option>
+                <option value="P">{% trans 'Proforma Invoice' %}</option>
+                <option value="I">{% trans 'Invoice' %}</option>
             </select>
         </div>
     </div>
@@ -33,20 +34,20 @@
     <div id="wrapper">
         <div class="form-row">
             <div class="form-group col-md-4">
-                <label for="article-1">#1 Item Name</label>
+                <label for="article-1">#1 {% trans 'Item Name' %}</label>
                 <input type="text" required class="form-control" id="article-1" name="article">
             </div>
             <div class="form-group col-md-2">
-                <label for="qty-1">Quantity</label>
+                <label for="qty-1">{% trans 'Quantity' %}</label>
                 <input type="number" min="1" step="0.1" required class="form-control" id="qty-1" name="qty">
             </div>
             <div class="form-group col-md-3">
-                <label for="unit_price-1">Unit Price</label>
+                <label for="unit_price-1">{% trans 'Unit Price' %}</label>
                 <input type="number" min="0" step="0.01" onchange="handleChangeSingleArticle(this.id)" required class="form-control" id="unit_price-1"
                     name="unit_price">
             </div>
             <div class="form-group col-md-3">
-                <label for="total_price-a-1">Total</label>
+                <label for="total_price-a-1">{% trans 'Total' %}</label>
                 <input type="number" min="0" step="0.01" readonly class="form-control" id="total_price-a-1"
                     name="total_price-a">
             </div>
@@ -55,25 +56,25 @@
 
     <div class="form-row">
         <div class="form-group col-md-12">
-            <label for="total_price">Total Price</label>
+            <label for="total_price">{% trans 'Total Price' %}</label>
             <input type="number" value="0" step="0.01" readonly class="form-control" id="total_price" name="total_price">
         </div>
     </div>
 
     <div class="form-row">
         <div class="form-group col-md-12">
-            <label for="comments">Comments</label>
+            <label for="comments">{% trans 'Comments' %}</label>
             <textarea class="form-control" id="comments" name="comments" rows="3" cols="30"></textarea>
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">{% trans 'Submit' %}</button>
 </form>
 
 <div class="form-row mx-5 mt-4">
     <div class="form-group col-md-12 md:flex-col d-flex justify-content-between gap-2">
-        <button type="button" class="btn btn-secondary w-1/2 col-md-6 p-2 rounded-sm" id="add-item">Add Item Line</button>
-        <button type="button" class="btn btn-danger w-1/2 col-md-6 p-2 rounded-sm" id="remove-item">Remove Last Item Line</button>
+        <button type="button" class="btn btn-secondary w-1/2 col-md-6 p-2 rounded-sm" id="add-item">{% trans 'Add Item Line' %}</button>
+        <button type="button" class="btn btn-danger w-1/2 col-md-6 p-2 rounded-sm" id="remove-item">{% trans 'Remove Last Item Line' %}</button>
     </div>
 </div>
 

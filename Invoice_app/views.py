@@ -6,15 +6,20 @@ from django.contrib import messages
 from django.db import transaction
 from .utils import pagination, get_invoice
 from django.template.loader import get_template  # to retrieve an html file
+from django.contrib.auth.decorators import login_required # used for functions
+from django.contrib.auth.mixins import LoginRequiredMixin # used for classes
+from django.utils.translation import gettext as _
 
 
 import datetime
 import os
 import pdfkit
 
+from .decorator import *
+
 
 # Create your views here.
-class HomeView(View):
+class HomeView(LoginRequiredSuperuserMixin, View):
     """
     Home view for the invoice application.
     Renders the index.html template.
@@ -48,18 +53,18 @@ class HomeView(View):
                 else:
                     obj.paid = False
                 obj.save()
-                messages.success(request, "Chnages made successfully.")
+                messages.success(request, _("Changes made successfully."))
             except Exception as e:
-                messages.error(request, f"Sorry, an error has occured: {e}")
+                messages.error(request, _(f"Sorry, an error has occured: {e}"))
 
         # deleting
         if request.POST.get("id_supprimer"):
             try:
                 obj = Invoice.objects.get(pk=request.POST.get("id_supprimer"))
                 obj.delete()
-                messages.success(request, "Deletion was successful.")
+                messages.success(request, _("Deletion was successful."))
             except Exception as e:
-                messages.error(request, f"Sorry, an error has occured: {e}")
+                messages.error(request, _(f"Sorry, an error has occured: {e}"))
 
         # placed here to update the displayed data
         items = pagination(request, self.invoices)  # Paginate the invoices
@@ -67,7 +72,7 @@ class HomeView(View):
         return render(request, self.template_name, self.context)
 
 
-class AddCustomerView(View):
+class AddCustomerView(LoginRequiredSuperuserMixin, View):
     """
     View for adding a new customer.
     Renders the add_customer.html template.
@@ -93,16 +98,16 @@ class AddCustomerView(View):
         try:
             created = Customer.objects.create(**data)  #
             if created:
-                messages.success(request, "Customer added successfully.")
+                messages.success(request, _("Customer added successfully."))
             else:
-                messages.error(request, "Error, try again.")
+                messages.error(request, _("Error, try again."))
         except Exception as e:
-            messages.error(request, f"Error occurred while adding customer: {str(e)}")
+            messages.error(request, _(f"Error occurred while adding customer: {str(e)}"))
 
         return render(request, self.template_name)
 
 
-class AddInvoiceView(View):
+class AddInvoiceView(LoginRequiredSuperuserMixin, View):
     """
     View for adding a new invoice.
     Renders the add_invoice.html template.
@@ -132,7 +137,7 @@ class AddInvoiceView(View):
                 comments = request.POST.get("comments")
 
                 if not articles:
-                    messages.error(request, "Please add at least one article.")
+                    messages.error(request, _("Please add at least one article."))
                     return render(request, self.template_name, context)
 
                 data = {
@@ -163,13 +168,13 @@ class AddInvoiceView(View):
                 Products.objects.bulk_create(
                     items
                 )  # Use bulk_create to insert multiple items at once
-                messages.success(request, "Invoice added successfully.")
+                messages.success(request, _("Invoice added successfully."))
         except Exception as e:
-            messages.error(request, f"Error occurred while adding invoice: {str(e)}.")
+            messages.error(request, _(f"Error occurred while adding invoice: {str(e)}."))
         return render(request, self.template_name, context)
 
 
-class InvoiceVisualisationView(View):
+class InvoiceVisualisationView(LoginRequiredSuperuserMixin, View):
     """
     View for visualising an Invoice.
     Renders the invoice.html template.
@@ -184,7 +189,7 @@ class InvoiceVisualisationView(View):
 
         return render(request, self.template_name, context)
 
-
+@superuser_required
 def get_invoice_pdf(request, *args, **kwargs):
     """
     generate pdf file from html file

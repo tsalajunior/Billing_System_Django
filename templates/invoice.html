@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load i18n %}
 {% load static %}
 
 {% block content %}
@@ -17,10 +18,10 @@
 								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 									<div class="custom-actions-btns mb-5">
 										<a href="{% url 'invoice_pdf' pk=obj.pk %}" class="btn btn-primary">
-											<i class="icon-download"></i> Download
+											<i class="icon-download"></i> {% trans 'Download' %}
 										</a>
 										<a href="" class="btn btn-secondary">
-											<i class="icon-printer"></i> Print
+											<i class="icon-printer"></i> {% trans 'Print' %}
 										</a>
 									</div>
 								</div>
@@ -34,14 +35,14 @@
 										href="#">
 										<img src="{% static 'images/InvoiceAppLogo.png' %}" width="150" height="150"
 											class="align-top" alt="">
-										<span class="mt-2 text-primary font-weight-bold">Invoice System</span>
+										<span class="mt-2 text-primary font-weight-bold">{% trans 'Invoice System' %}</span>
 									</a>
 
 								</div>
 								<div class="col-lg-6 col-md-6 col-sm-6">
 									<address class="text-right">
-										Invoice System Inc, 45 NorthWest<br>
-										USA, New York City<br>
+										{% trans 'Invoice System Inc, 45 NorthWest' %}<br>
+										{% trans 'USA, New York City' %}<br>
 										27353
 									</address>
 								</div>
@@ -80,11 +81,11 @@
 										<table class="table custom-table m-0">
 											<thead>
 												<tr>
-													<th>Items</th>
-													<th>Product ID</th>
-													<th>Quantities</th>
-													<th>Unit Price</th>
-													<th>Subtotal</th>
+													<th>{% trans 'Items' %}</th>
+													<th>{% trans 'Product ID' %}</th>
+													<th>{% trans 'Quantities' %}</th>
+													<th>{% trans 'Unit Price' %}</th>
+													<th>{% trans 'Subtotal' %}</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -126,20 +127,20 @@
 
 
 												<tr>
-													<td>Comment: {{obj.comments}}</td>
+													<td>{% trans 'Comment' %}: {{obj.comments}}</td>
 													<td colspan="2">
 														<p>
-															Subtotal<br>
-															Shipment &amp; Handling<br>
-															Tax<br>
+															{% trans 'Subtotal' %}<br>
+															{% trans 'Shipment & Handling' %}<br>
+															{% trans 'Tax' %}<br>
 														</p>
 														<h5>
 															{% if obj.paid %}
 
-															<strong class="text-success">Total</strong>
+															<strong class="text-success">{% trans 'Total' %}</strong>
 
 															{% else %}
-															<strong class="text-danger">Total</strong>
+															<strong class="text-danger">{% trans 'Total' %}</strong>
 
 
 															{% endif %}
@@ -160,7 +161,7 @@
 														</h5>
 													</td>
 													<td class="d-flex align-items-center gap-2">
-														PAID:
+														{% trans 'PAID' %}:
 
 														{% if obj.paid %}
 
@@ -183,7 +184,7 @@
 						</div>
 
 						<div class="invoice-footer">
-							Thank you for your purchase.
+							{% trans 'Thank you for your purchase.' %}
 						</div>
 
 					</div>
