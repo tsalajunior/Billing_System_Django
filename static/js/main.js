@@ -92,11 +92,11 @@ function handleChangeSingleArticle(id) {
     let idQty = `#qty-${articleId}`;
     let idUnitPrice = `#unit_price-${articleId}`;
     let totalIdLine = `#total_price-a-${articleId}`;
-    
+
     // Sécurité : Remplacer par 0 si le champ est vide pour éviter le bug du NaN
     let qty = parseFloat($(idQty).val()) || 0;
     let unitPrice = parseFloat($(idUnitPrice).val()) || 0;
-    
+
     // Calcul et affichage du prix de la ligne (arrondi à 2 décimales)
     let totalLine = qty * unitPrice;
     $(totalIdLine).val(totalLine.toFixed(2));
@@ -108,13 +108,16 @@ function handleChangeSingleArticle(id) {
 // Nouvelle fonction pour calculer proprement le total général
 function calculateGrandTotal() {
     let grandTotal = 0;
-    
+
     // On parcourt chaque input de total de ligne
-    $('input[name="total_price-a"]').each(function() {
+    $('input[name="total_price-a"]').each(function () {
         let value = parseFloat($(this).val()) || 0;
         grandTotal += value;
     });
-    
+
     // Mise à jour du champ Grand Total
     $('#total_price').val(grandTotal.toFixed(2));
 }
+
+
+

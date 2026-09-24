@@ -7,5 +7,6 @@ urlpatterns = [
     path('add_customer/', views.AddCustomerView.as_view(), name='add_customer'),
     path('add_invoice/', views.AddInvoiceView.as_view(), name='add_invoice'),
     path('view_invoice/<int:pk>', views.InvoiceVisualisationView.as_view(), name='view_invoice'),
-    path('invoice_pdf/<int:pk>', views.get_invoice_pdf, name="invoice_pdf")
+    path('invoice_pdf/<int:pk>', views.get_invoice_pdf, name="invoice_pdf"),
+    path('statistics', views.StatisticsView.as_view(), name='statistics')
 ]

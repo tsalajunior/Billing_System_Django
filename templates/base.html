@@ -14,7 +14,11 @@
     <link rel="icon" type="image/x-icon" href="{% static 'images/InvoiceAppLogo.ico' %}">
 
     <script src="https://code.jquery.com/jquery-3.7.1.js"
-        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous">
+    </script>
+    <!-- chartjs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <title>{% trans 'Invoice System' %}</title>
 </head>
 
@@ -54,13 +58,13 @@
                     <li class="nav-item dropdown ml-lg-3">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
                             aria-expanded="false">
-                            {% trans 'More options' %}
+                            {% translate 'More options' %}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="{% url 'add_customer' %}">{% trans 'Add customer' %}</a>
                             <a class="dropdown-item" href="{% url 'add_invoice' %}">{% trans 'Add invoice' %}</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">{% trans 'Statistics' %}</a>
+                            <a class="dropdown-item" href="{% url 'statistics' %}">{% trans 'Statistics' %}</a>
                         </div>
                     </li>
                 </ul>
@@ -90,18 +94,15 @@
     {% endblock %}
 
     <script src="{% static 'js/main.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
         crossorigin="anonymous"></script>
 
 
-    <footer class="text-center ml-5 mr-5 mt-4">
+    <footer class="text-center mx-5 py-3 mt-4">
         <div class="text-center">
             &copy; 2026 {% trans 'Copyright' %}:
-            <a href="https://www.linkedin.com/in/stephane-tsala/" target="_blank">{% trans 'By Stephane Tsala' %}</a> |
+            <span>{% trans 'By' %} <a href="https://www.linkedin.com/in/stephane-tsala/" target="_blank">{% trans 'Stephane Tsala' %}</a></span> |
             <a href="https://www.github.com/tsalajunior/" target="_blank">GitHub</a>
         </div>
     </footer>

@@ -1,0 +1,240 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<br><br>
+<h1 class="text-capitalize text-center my-10 bg-dark text-white mx-5">{% translate 'STATISTICS' %}</h1>
+<br>
+<div class="row mx-5">
+    <div class="col-md-4">
+        <div style="background-color: #272e48;" class="card text-white">
+            <div class="card-body">
+
+                <div class="mr-5"> <strong>{% translate 'Customers' %}</strong> : {{ customer }}</div>
+            </div>
+            <a class="card-footer text-white clearfix small z-1" href="#">
+                <span class="float-left">{% translate 'Total number of customer' %}</span><br>
+                <span class="float-right">
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div style="background-color: #272e48;" class="card text-white ">
+            <div class="card-body">
+
+                <div class="mr-5"> <strong>{% translate 'Invoices' %}</strong> : {{ invoice }}</div>
+            </div>
+            <a class="card-footer text-white clearfix small z-1" href="#">
+                <span class="float-left">{% translate 'Total number of Invoices' %}</span><br>
+                <span class="float-right">
+                </span>
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div style="background-color: #272e48;" class="card text-white ">
+            <div class="card-body">
+
+                <div class="mr-5"> <strong>{% translate 'Total income' %}</strong> : {{ income }} €</div>
+            </div>
+            <a class="card-footer text-white clearfix small z-1" href="#">
+                <span class="float-left">{% translate 'Total income' %}</span><br>
+                <span class="float-right">
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<br><br>
+
+<div class="form-row mx-5">
+    <div class="form-group col-md-12">
+        <label for="year">{% translate 'Year' %}</label>
+        <select name="year" id="year" class="form-control">
+            <option value="all">{% translate 'All' %}</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+            <option value="2027">2027</option>
+            <option value="2028">2028</option>
+            <option value="2029">2029</option>
+            <option value="2030">2030</option>
+        </select>
+    </div>
+</div>
+
+<div class="row mx-5">
+    <div class="col-md-12">
+        <h4 class="text-center text-white">{% translate 'INCOME DIAGRAM PER MONTH' %}</h4>
+        <canvas id="myMounth"></canvas>
+    </div>
+</div>
+
+<br> <br>
+
+<div class="row mx-5">
+    <div class="col-md-6">
+        <h4 class="text-center text-white">{% translate 'COSTUMERS AGE DIAGRAM' %}</h4>
+        <canvas id="mydoughnutChart"></canvas>
+    </div>
+    <div class="col-md-6">
+        <h4 class="text-center text-white">{% translate 'COSTUMERS GENDER DIAGRAM' %}</h4>
+        <canvas id="labelChart"></canvas>
+    </div>
+</div>
+
+
+<!-- display diagrams -->
+<script type="text/javascript">
+    const ctx = document.getElementById('myMounth');
+    const labels = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    var monthly_data = {{ monthly_data|safe }};
+    var barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Monthly Sold',
+                data: monthly_data,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)',
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { ticks: { color: 'white' } },
+                x: { ticks: { color: 'white' } },
+            }
+        }
+    });
+
+    var ctxD = document.getElementById("mydoughnutChart").getContext('2d');
+    var data_ages = {{ data_ages|safe }};
+    var myLineChart = new Chart(ctxD, {
+        type: 'doughnut',
+        data: {
+            labels: ["0-15", "15-25", "25-35", "35-65", "+65"],
+            datasets: [{
+                data: data_ages,
+                backgroundColor: ["rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(201, 203, 207)", "rgb(54, 162, 235)", "rgb(75, 192, 192)"],
+                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    var ctxP = document.getElementById("labelChart").getContext('2d');
+    var data_sexs = {{ data_sexs|safe }};
+    var sexValues = Array.isArray(data_sexs) && data_sexs.some(value => value > 0)
+        ? data_sexs
+        : [1, 1];
+
+    var myPieChart = new Chart(ctxP, {
+        type: 'pie',
+        data: {
+            labels: ["Male", "Female"],
+            datasets: [{
+                data: sexValues,
+                backgroundColor: ["#add2cd", "#272e48"],
+                hoverBackgroundColor: ["#FF5A5E", "#616774"]
+            }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'right',
+                labels: {
+                    padding: 20,
+                    boxWidth: 10,
+                    color: 'white'
+                },
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'white'
+                    }
+                }
+            }
+        }
+    });
+
+
+
+    $('#year').on('change', function () {
+        var selectdDate = $(this).val();
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'statistics' %}",
+            data: { 'selected_date': selectdDate },
+            headers: {
+                'X-CSRFToken': csrftoken
+            },
+            success: function (data) {
+                console.log(data);
+                barChart.data.datasets[0].data = data.monthly_data;
+                myLineChart.data.datasets[0].data = data.data_ages;
+                myPieChart.data.datasets[0].data = data.data_sexs;
+                barChart.update();
+                myLineChart.update();
+                myPieChart.update();
+            }
+        })
+    })
+
+</script>
+{% endblock content %}

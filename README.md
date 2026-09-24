@@ -45,6 +45,7 @@ A simple **Django-based billing management application** that allows users to au
 * **CSS3**
 * **JavaScript**
 * **Bootstrap**
+* **ChartJs**
 
 ### Database
 
@@ -311,3 +312,9 @@ This project is intended for educational and/or personal use.
 ![1789988925588](image/README/1789988925588.png)
 
 ![1790097795817](image/README/1790097795817.png)
+
+![1790239240269](image/README/1790239240269.png)
+
+![1790239247216](image/README/1790239247216.png)
+
+![1790239420115](image/README/1790239420115.png)
